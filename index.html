@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/webfont/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#1B4FD8;--brand-light:#EEF2FF;--brand-dark:#1239A8;
+  --success:#059669;--success-bg:#ECFDF5;
+  --warn:#D97706;--warn-bg:#FFFBEB;
+  --danger:#DC2626;--danger-bg:#FEF2F2;
+  --info:#0284C7;--info-bg:#E0F2FE;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f8f9fa;
+  --color-background-tertiary:#f1f3f5;
+  --color-border-tertiary:#e9ecef;
+  --color-border-secondary:#dee2e6;
+  --color-text-primary:#212529;
+  --color-text-secondary:#495057;
+  --color-text-tertiary:#868e96;
+  --surface:var(--color-background-primary);
+  --surface2:var(--color-background-secondary);
+  --surface3:var(--color-background-tertiary);
+  --border:var(--color-border-tertiary);
+  --border2:var(--color-border-secondary);
+  --txt:var(--color-text-primary);
+  --txt2:var(--color-text-secondary);
+  --txt3:var(--color-text-tertiary);
+  --radius:10px;--radius-lg:14px;
+  --ff:'DM Sans',sans-serif;
+  --ff-mono:'Space Mono',monospace;
+}
+body{font-family:var(--ff);color:var(--txt);background:var(--surface3);min-height:100vh;font-size:14px}
+
+/* Layout */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:200px;flex-shrink:0;background:var(--surface);border-right:0.5px solid var(--border);padding:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* Sidebar */
+.logo{padding:20px 16px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;background:var(--brand);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-mark i{color:#fff;font-size:15px}
+.logo-text{font-size:14px;font-weight:600;letter-spacing:-.3px}
+.logo-sub{font-size:10px;color:var(--txt3);font-weight:400;letter-spacing:.3px;text-transform:uppercase}
+.nav{padding:12px 8px;flex:1}
+.nav-label{font-size:10px;font-weight:500;color:var(--txt3);letter-spacing:.8px;text-transform:uppercase;padding:0 8px;margin:12px 0 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--txt2);font-size:13px;font-weight:400;transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--txt)}
+.nav-item.active{background:var(--brand-light);color:var(--brand);font-weight:500}
+.nav-item.active i{color:var(--brand)}
+.nav-item i{font-size:16px;color:var(--txt3);width:18px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
+.nav-badge.warn{background:var(--warn)}
+.sidebar-foot{padding:12px 8px;border-top:0.5px solid var(--border)}
+.user-card{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer}
+.user-card:hover{background:var(--surface2)}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:500}
+.user-role{font-size:11px;color:var(--txt3)}
+
+/* Topbar */
+.topbar{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.page-title{font-size:16px;font-weight:600;letter-spacing:-.3px}
+.page-sub{font-size:12px;color:var(--txt3);margin-left:2px}
+.topbar-spacer{flex:1}
+.topbar-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--surface);cursor:pointer;font-size:12px;color:var(--txt2);font-family:var(--ff);transition:all .15s}
+.topbar-btn:hover{background:var(--surface2);color:var(--txt)}
+.topbar-btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.topbar-btn.primary:hover{background:var(--brand-dark)}
+.notif{position:relative}
+.notif-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid var(--surface)}
+
+/* Content */
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--surface2);border-radius:10px;padding:3px;margin-bottom:20px;border:0.5px solid var(--border)}
+.tab{padding:6px 14px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:400;color:var(--txt2);border:none;background:none;font-family:var(--ff);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--txt)}
+.tab.active{background:var(--surface);color:var(--txt);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tab i{font-size:14px}
+
+/* Cards */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;cursor:pointer;transition:all .2s}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.stat-label{font-size:11px;color:var(--txt3);font-weight:500;letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.stat-label i{font-size:13px}
+.stat-val{font-size:24px;font-weight:600;letter-spacing:-1px;line-height:1}
+.stat-delta{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:3px}
+.up{color:var(--success)}.down{color:var(--danger)}.neutral{color:var(--txt3)}
+
+/* Section headers */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:14px;font-weight:600}
+.sec-action{font-size:12px;color:var(--brand);cursor:pointer;border:none;background:none;font-family:var(--ff);padding:4px 8px;border-radius:6px}
+.sec-action:hover{background:var(--brand-light)}
+
+/* Shipment table */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
+.card-body{padding:16px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:500;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:0.5px solid var(--border);background:var(--surface2)}
+td{padding:11px 14px;font-size:13px;border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge.transit{background:var(--info-bg);color:var(--info)}
+.badge.delivered{background:var(--success-bg);color:var(--success)}
+.badge.delayed{background:var(--danger-bg);color:var(--danger)}
+.badge.pending{background:var(--warn-bg);color:var(--warn)}
+.badge i{font-size:10px}
+.progress-bar{width:100%;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s}
+.fill-blue{background:var(--brand)}
+.fill-green{background:var(--success)}
+.fill-warn{background:var(--warn)}
+.mono{font-family:var(--ff-mono);font-size:11px;color:var(--txt2)}
+
+/* Grid layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+
+/* AI panel */
+.ai-card{background:linear-gradient(135deg,#1B4FD8 0%,#1239A8 100%);border-radius:var(--radius-lg);padding:16px;color:#fff;margin-bottom:16px}
+.ai-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ai-chip{background:rgba(255,255,255,.15);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.ai-body{font-size:13px;opacity:.9;line-height:1.6;margin-bottom:12px}
+.ai-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ai-btn{background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.25);color:#fff;border-radius:7px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--ff);transition:all .15s}
+.ai-btn:hover{background:rgba(255,255,255,.25)}
+.ai-insight{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;opacity:.85;border-left:3px solid rgba(255,255,255,.4)}
+
+/* Alert list */
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border)}
+.alert-item:last-child{border-bottom:none}
+.alert-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.alert-icon.danger{background:var(--danger-bg)}
+.alert-icon.danger i{color:var(--danger);font-size:13px}
+.alert-icon.warn{background:var(--warn-bg)}
+.alert-icon.warn i{color:var(--warn);font-size:13px}
+.alert-icon.info{background:var(--info-bg)}
+.alert-icon.info i{color:var(--info);font-size:13px}
+.alert-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.alert-sub{font-size:11px;color:var(--txt3)}
+.alert-time{font-size:11px;color:var(--txt3);margin-left:auto;flex-shrink:0;padding-top:2px}
+
+/* Map placeholder */
+.map-area{background:var(--surface2);border-radius:var(--radius);height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:0.5px solid var(--border)}
+.map-dot{position:absolute;width:10px;height:10px;border-radius:50%;border:2px solid #fff}
+.map-dot.active{background:var(--brand);animation:pulse 1.5s infinite}
+.map-dot.delivered{background:var(--success)}
+.map-dot.delayed{background:var(--danger)}
+.map-line{position:absolute;height:1px;background:var(--brand);opacity:.3;transform-origin:left center}
+.map-label{position:absolute;font-size:9px;font-weight:500;color:var(--txt2);background:var(--surface);padding:2px 5px;border-radius:4px;border:0.5px solid var(--border)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(27,79,216,.4)}50%{box-shadow:0 0 0 8px rgba(27,79,216,0)}}
+
+/* Chart bars */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;padding-top:8px}
+.bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s}
+.bar-lbl{font-size:10px;color:var(--txt3)}
+.bar-val{font-size:10px;font-weight:500;color:var(--txt2)}
+
+/* Driver list */
+.driver-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .15s}
+.driver-item:hover{background:var(--surface2)}
+.driver-item:last-child{border-bottom:none}
+.driver-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.driver-name{font-size:13px;font-weight:500}
+.driver-sub{font-size:11px;color:var(--txt3)}
+.driver-status{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:11px}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* Forms */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+label.form-label{font-size:11px;font-weight:500;color:var(--txt2);letter-spacing:.3px}
+input.form-input,select.form-select,textarea.form-textarea{background:var(--surface2);border:0.5px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--txt);font-family:var(--ff);outline:none;transition:border-color .15s;width:100%}
+input.form-input:focus,select.form-select:focus,textarea.form-textarea:focus{border-color:var(--brand)}
+textarea.form-textarea{resize:vertical;min-height:70px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--ff);transition:all .15s;border:0.5px solid var(--border2);background:var(--surface)}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn.primary:hover{background:var(--brand-dark)}
+.btn.danger{background:var(--danger-bg);color:var(--danger);border-color:transparent}
+
+/* Cost breakdown */
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border)}
+.cost-row:last-child{border-bottom:none;font-weight:600}
+.cost-label{font-size:13px;color:var(--txt2)}
+.cost-val{font-size:13px;font-weight:500}
+.cost-flag{font-size:11px;padding:2px 7px;border-radius:20px}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:15px}
+.search-input{width:100%;padding:8px 10px 8px 32px;border-radius:8px;border:0.5px solid var(--border2);background:var(--surface);font-size:13px;color:var(--txt);font-family:var(--ff);outline:none}
+.search-input:focus{border-color:var(--brand)}
+
+/* Metric mini */
+.mini-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.mini-m{background:var(--surface2);border-radius:8px;padding:10px;text-align:center}
+.mini-val{font-size:18px;font-weight:600;letter-spacing:-0.5px}
+.mini-lbl{font-size:10px;color:var(--txt3);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
+
+/* Toast */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--txt);color:var(--surface);border-radius:10px;padding:10px 16px;font-size:13px;display:none;align-items:center;gap:8px;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+#toast i{color:var(--success-bg);font-size:16px}
+
+/* Empty state */
+.empty{text-align:center;padding:40px 20px;color:var(--txt3)}
+.empty i{font-size:32px;margin-bottom:8px;display:block}
+.empty p{font-size:13px}
+
+/* Pages */
+.page{display:none}
+.page.active{display:block}
+
+/* Tooltip area */
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--txt2)}
+
+/* AI chat */
+.ai-msg{background:var(--brand-light);border-radius:0 10px 10px 10px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:var(--txt);line-height:1.55;border:0.5px solid rgba(27,79,216,.15)}
+.user-msg{background:var(--surface2);border-radius:10px 0 10px 10px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:var(--txt);line-height:1.55;text-align:right;border:0.5px solid var(--border)}
+.chat-area{max-height:260px;overflow-y:auto;padding:12px;display:flex;flex-direction:column}
+.chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:0.5px solid var(--border)}
+.chat-in{flex:1;border:0.5px solid var(--border2);background:var(--surface2);border-radius:8px;padding:8px 10px;font-size:13px;font-family:var(--ff);color:var(--txt);outline:none}
+.chat-in:focus{border-color:var(--brand)}
+
+.spin{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark"><i class="ti ti-truck"></i></div>
+    <div>
+      <div class="logo-text">FreightFlow</div>
+      <div class="logo-sub">AI Ops</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-label">Main</div>
+    <button class="nav-item active" onclick="showPage('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
+    <button class="nav-item" onclick="showPage('shipments',this)"><i class="ti ti-package"></i>Shipments <span class="nav-badge">3</span></button>
+    <button class="nav-item" onclick="showPage('dispatch',this)"><i class="ti ti-route"></i>Dispatch</button>
+    <button class="nav-item" onclick="showPage('drivers',this)"><i class="ti ti-users"></i>Drivers</button>
+    <div class="nav-label">Intelligence</div>
+    <button class="nav-item" onclick="showPage('ai',this)"><i class="ti ti-brain"></i>AI Co-pilot</button>
+    <button class="nav-item" onclick="showPage('costs',this)"><i class="ti ti-chart-bar"></i>Cost Tracker <span class="nav-badge warn">!</span></button>
+    <button class="nav-item" onclick="showPage('reports',this)"><i class="ti ti-file-analytics"></i>Reports</button>
+    <div class="nav-label">Settings</div>
+    <button class="nav-item" onclick="showPage('settings',this)"><i class="ti ti-settings"></i>Settings</button>
+  </nav>
+  <div class="sidebar-foot">
+    <div class="user-card">
+      <div class="avatar">AO</div>
+      <div><div class="user-name">Ade Okafor</div><div class="user-role">Fleet Manager</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="topbar-title">Dashboard</div>
+      <div class="page-sub" id="topbar-sub">Good morning, Ade — 3 shipments need attention</div>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" onclick="showPage('dispatch',document.querySelector('[onclick*=dispatch]'))"><i class="ti ti-plus"></i> New Shipment</button>
+    <button class="topbar-btn notif" onclick="showPage('shipments',document.querySelector('[onclick*=shipments]'))"><i class="ti ti-bell"></i><div class="notif-dot"></div></button>
+    <button class="topbar-btn primary" onclick="showPage('ai',document.querySelector('[onclick*=ai]'))"><i class="ti ti-brain"></i> Ask AI</button>
+  </div>
+
+  <div class="content">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="stat-grid">
+    <div class="stat-card" onclick="showPage('shipments',document.querySelector('[onclick*=shipments]'))">
+      <div class="stat-label"><i class="ti ti-package"></i> Active Shipments</div>
+      <div class="stat-val" style="color:var(--brand)">24</div>
+      <div class="stat-delta up"><i class="ti ti-trending-up"></i> +3 from yesterday</div>
+    </div>
+    <div class="stat-card" onclick="showPage('drivers',document.querySelector('[onclick*=drivers]'))">
+      <div class="stat-label"><i class="ti ti-users"></i> Drivers On Road</div>
+      <div class="stat-val" style="color:var(--success)">11</div>
+      <div class="stat-delta neutral"><i class="ti ti-minus"></i> 2 on break</div>
+    </div>
+    <div class="stat-card" onclick="showPage('costs',document.querySelector('[onclick*=costs]'))">
+      <div class="stat-label"><i class="ti ti-clock"></i> On-Time Rate</div>
+      <div class="stat-val" style="color:var(--warn)">87%</div>
+      <div class="stat-delta down"><i class="ti ti-trending-down"></i> -4% this week</div>
+    </div>
+    <div class="stat-card" onclick="showPage('costs',document.querySelector('[onclick*=costs]'))">
+      <div class="stat-label"><i class="ti ti-currency-naira"></i> Revenue Today</div>
+      <div class="stat-val" style="color:var(--success)">₦2.4M</div>
+      <div class="stat-delta up"><i class="ti ti-trending-up"></i> +12% vs last wk</div>
+    </div>
+  </div>
+
+  <div class="ai-card">
+    <div class="ai-header">
+      <i class="ti ti-brain" style="font-size:18px"></i>
+      <span style="font-size:14px;font-weight:600">AI Co-pilot Insights</span>
+      <span class="ai-chip">Live</span>
+    </div>
+    <div class="ai-body">Route 7 (Lagos–Ibadan) is running 23 min behind schedule. AI suggests rerouting driver Emeka via Ikorodu Rd — estimated time saving: <strong>18 min</strong>.</div>
+    <div class="ai-insight"><i class="ti ti-alert-triangle"></i> Cost alert: Fuel spend is 14% above budget this week. 3 routes can be merged to save ~₦180K.</div>
+    <div class="ai-actions">
+      <button class="ai-btn" onclick="applyReroute()"><i class="ti ti-route"></i> Apply Reroute</button>
+      <button class="ai-btn" onclick="showPage('costs',document.querySelector('[onclick*=costs]'))"><i class="ti ti-chart-bar"></i> View Cost Savings</button>
+      <button class="ai-btn" onclick="showPage('ai',document.querySelector('[onclick*=ai]'))"><i class="ti ti-message"></i> Ask AI</button>
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">Live Fleet Map</div><button class="sec-action">Full map <i class="ti ti-external-link"></i></button></div>
+      <div class="card">
+        <div class="map-area" id="mapArea">
+          <svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.08" viewBox="0 0 400 200"><path d="M0,100 Q100,60 200,100 T400,100" fill="none" stroke="var(--brand)" stroke-width="1"/><path d="M0,140 Q80,100 160,130 T320,120 T400,140" fill="none" stroke="var(--brand)" stroke-width="1"/><path d="M50,0 L50,200M150,0 L150,200M250,0 L250,200M350,0 L350,200" stroke="var(--brand)" stroke-width=".5"/><path d="M0,50 L400,50M0,100 L400,100M0,150 L400,150" stroke="var(--brand)" stroke-width=".5"/></svg>
+          <div class="map-dot active" style="left:40%;top:35%"></div>
+          <div class="map-dot active" style="left:60%;top:55%"></div>
+          <div class="map-dot active" style="left:25%;top:60%"></div>
+          <div class="map-dot delivered" style="left:70%;top:30%"></div>
+          <div class="map-dot delayed" style="left:55%;top:75%"></div>
+          <div class="map-label" style="left:42%;top:22%">Lagos</div>
+          <div class="map-label" style="left:62%;top:42%">Ibadan</div>
+          <div class="map-label" style="left:23%;top:67%">Abeokuta</div>
+          <div class="map-label" style="left:67%;top:78%">Abuja</div>
+          <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:8px;font-size:10px;color:var(--txt3)">
+            <span style="display:flex;align-items:center;gap:3px"><span class="dot" style="background:var(--brand)"></span>Moving</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="dot" style="background:var(--success)"></span>Delivered</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="dot" style="background:var(--danger)"></span>Delayed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:16px"><div class="sec-title">Recent Shipments</div><button class="sec-action" onclick="showPage('shipments',document.querySelector('[onclick*=shipments]'))">View all →</button></div>
+      <div class="card">
+        <table>
+          <thead><tr><th>ID</th><th>Route</th><th>Status</th><th>ETA</th></tr></thead>
+          <tbody>
+            <tr onclick="openShipment('SH-2847')"><td class="mono">SH-2847</td><td>Lagos → Kano</td><td><span class="badge transit"><i class="ti ti-truck"></i>In Transit</span></td><td>2h 14m</td></tr>
+            <tr onclick="openShipment('SH-2846')"><td class="mono">SH-2846</td><td>PH → Lagos</td><td><span class="badge delayed"><i class="ti ti-alert-circle"></i>Delayed</span></td><td>+45m late</td></tr>
+            <tr onclick="openShipment('SH-2845')"><td class="mono">SH-2845</td><td>Abuja → Enugu</td><td><span class="badge delivered"><i class="ti ti-check"></i>Delivered</span></td><td>Done</td></tr>
+            <tr onclick="openShipment('SH-2844')"><td class="mono">SH-2844</td><td>Lagos → Ibadan</td><td><span class="badge pending"><i class="ti ti-clock"></i>Pending</span></td><td>Scheduled</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head"><div class="sec-title">Alerts</div><span class="badge delayed">3 urgent</span></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="alert-item">
+          <div class="alert-icon danger"><i class="ti ti-alert-triangle"></i></div>
+          <div><div class="alert-title">SH-2846 is delayed</div><div class="alert-sub">Traffic on Apapa–Oshodi Exp</div></div>
+          <div class="alert-time">5m ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon warn"><i class="ti ti-gas-station"></i></div>
+          <div><div class="alert-title">Fuel budget exceeded</div><div class="alert-sub">14% over weekly target</div></div>
+          <div class="alert-time">1h ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon danger"><i class="ti ti-file-x"></i></div>
+          <div><div class="alert-title">Document missing</div><div class="alert-sub">SH-2847 waybill not uploaded</div></div>
+          <div class="alert-time">2h ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon info"><i class="ti ti-circle-check"></i></div>
+          <div><div class="alert-title">SH-2845 delivered</div><div class="alert-sub">Signed off by Chidi Eze</div></div>
+          <div class="alert-time">3h ago</div>
+        </div>
+      </div>
+
+      <div class="sec-head"><div class="sec-title">Deliveries This Week</div></div>
+      <div class="card"><div class="card-body">
+        <div class="bar-chart">
+          <div class="bar-wrap"><div class="bar-val">12</div><div class="bar" style="height:60%;background:var(--brand);opacity:.5"></div><div class="bar-lbl">Mon</div></div>
+          <div class="bar-wrap"><div class="bar-val">18</div><div class="bar" style="height:90%;background:var(--brand);opacity:.7"></div><div class="bar-lbl">Tue</div></div>
+          <div class="bar-wrap"><div class="bar-val">14</div><div class="bar" style="height:70%;background:var(--brand);opacity:.5"></div><div class="bar-lbl">Wed</div></div>
+          <div class="bar-wrap"><div class="bar-val">20</div><div class="bar" style="height:100%;background:var(--brand)"></div><div class="bar-lbl">Thu</div></div>
+          <div class="bar-wrap"><div class="bar-val">9</div><div class="bar" style="height:45%;background:var(--brand);opacity:.4"></div><div class="bar-lbl">Fri</div></div>
+          <div class="bar-wrap"><div class="bar-val">6</div><div class="bar" style="height:30%;background:var(--surface2);border:0.5px dashed var(--border2)"></div><div class="bar-lbl" style="color:var(--txt3)">Sat</div></div>
+          <div class="bar-wrap"><div class="bar-val" style="color:var(--txt3)">—</div><div class="bar" style="height:10%;background:var(--surface2);border:0.5px dashed var(--border2)"></div><div class="bar-lbl" style="color:var(--txt3)">Sun</div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SHIPMENTS -->
+<div class="page" id="page-shipments">
+  <div class="tabs">
+    <button class="tab active" onclick="filterShipments('all',this)"><i class="ti ti-list"></i> All (24)</button>
+    <button class="tab" onclick="filterShipments('transit',this)"><i class="ti ti-truck"></i> In Transit (12)</button>
+    <button class="tab" onclick="filterShipments('delayed',this)"><i class="ti ti-alert-circle"></i> Delayed (3)</button>
+    <button class="tab" onclick="filterShipments('delivered',this)"><i class="ti ti-check"></i> Delivered (9)</button>
+    <button class="tab" onclick="filterShipments('pending',this)"><i class="ti ti-clock"></i> Pending (0)</button>
+  </div>
+  <div class="search-wrap"><i class="ti ti-search"></i><input class="search-input" placeholder="Search by ID, route, client…" oninput="searchShipments(this.value)"></div>
+  <div class="card">
+    <table id="shipment-table">
+      <thead><tr><th>Shipment ID</th><th>Client</th><th>Route</th><th>Driver</th><th>Status</th><th>Progress</th><th>ETA</th><th></th></tr></thead>
+      <tbody id="shipment-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DISPATCH -->
+<div class="page" id="page-dispatch">
+  <div class="two-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">New Shipment</div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Client Name</label><input class="form-input" placeholder="e.g. Dangote Group" id="f-client"></div>
+          <div class="form-group"><label class="form-label">Contact Phone</label><input class="form-input" placeholder="+234…" id="f-phone"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Origin City</label><input class="form-input" placeholder="e.g. Lagos" id="f-from"></div>
+          <div class="form-group"><label class="form-label">Destination City</label><input class="form-input" placeholder="e.g. Abuja" id="f-to"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Cargo Type</label><select class="form-select" id="f-cargo"><option>General Goods</option><option>Perishables</option><option>Electronics</option><option>Construction Materials</option><option>Chemicals</option><option>Dangerous Goods</option></select></div>
+          <div class="form-group"><label class="form-label">Weight (kg)</label><input class="form-input" placeholder="e.g. 5000" id="f-weight" type="number"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Assign Driver</label><select class="form-select" id="f-driver"><option>Auto-assign (AI)</option><option>Emeka Nwosu</option><option>Tunde Adeyemi</option><option>Chukwu Obi</option><option>Yusuf Musa</option></select></div>
+          <div class="form-group"><label class="form-label">Pickup Date</label><input class="form-input" type="date" id="f-date"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px"><label class="form-label">Special Instructions</label><textarea class="form-textarea" placeholder="Fragile, temperature-sensitive, etc." id="f-notes"></textarea></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn primary" onclick="createShipment()"><i class="ti ti-plus"></i> Create Shipment</button>
+          <button class="btn" onclick="clearForm()"><i class="ti ti-refresh"></i> Clear</button>
+        </div>
+      </div></div>
+    </div>
+    <div>
+      <div class="sec-head"><div class="sec-title">AI Route Optimizer</div></div>
+      <div class="card"><div class="card-body">
+        <div style="background:var(--brand-light);border-radius:8px;padding:12px;margin-bottom:12px;border:0.5px solid rgba(27,79,216,.2)">
+          <div style="font-size:12px;font-weight:600;color:var(--brand);margin-bottom:6px"><i class="ti ti-sparkles"></i> AI Suggestion</div>
+          <div style="font-size:13px;color:var(--txt);line-height:1.55">For Lagos → Abuja routes, the <strong>A2 via Lokoja</strong> is currently 12% faster than the Kaduna bypass due to construction delays reported at Suleja.</div>
+        </div>
+        <div class="cost-row"><span class="cost-label">Estimated Distance</span><span class="cost-val">756 km</span></div>
+        <div class="cost-row"><span class="cost-label">AI Route Time</span><span class="cost-val" style="color:var(--success)">~9h 20m</span></div>
+        <div class="cost-row"><span class="cost-label">Fuel Estimate</span><span class="cost-val">~₦48,000</span></div>
+        <div class="cost-row"><span class="cost-label">Toll Charges</span><span class="cost-val">~₦4,500</span></div>
+        <div class="cost-row" style="font-weight:600"><span>Total Cost Estimate</span><span style="color:var(--brand)">~₦52,500</span></div>
+        <div class="tag-row">
+          <span class="tag"><i class="ti ti-shield-check"></i> Low risk route</span>
+          <span class="tag"><i class="ti ti-gas-station"></i> Fuel stop: Lokoja</span>
+          <span class="tag"><i class="ti ti-clock"></i> Avoid peak: 7–9am</span>
+        </div>
+      </div></div>
+
+      <div class="sec-head" style="margin-top:16px"><div class="sec-title">Available Drivers</div></div>
+      <div class="card">
+        <div class="driver-item">
+          <div class="driver-av" style="background:#ECFDF5;color:var(--success)">EN</div>
+          <div><div class="driver-name">Emeka Nwosu</div><div class="driver-sub">Truck 04 · Last delivery 2h ago</div></div>
+          <div class="driver-status"><span class="dot" style="background:var(--success)"></span><span style="color:var(--success)">Available</span></div>
+        </div>
+        <div class="driver-item">
+          <div class="driver-av" style="background:#EEF2FF;color:var(--brand)">TA</div>
+          <div><div class="driver-name">Tunde Adeyemi</div><div class="driver-sub">Truck 07 · On route PH–Lagos</div></div>
+          <div class="driver-status"><span class="dot" style="background:var(--warn)"></span><span style="color:var(--warn)">On Duty</span></div>
+        </div>
+        <div class="driver-item">
+          <div class="driver-av" style="background:#ECFDF5;color:var(--success)">YM</div>
+          <div><div class="driver-name">Yusuf Musa</div><div class="driver-sub">Truck 11 · Idle since 8am</div></div>
+          <div class="driver-status"><span class="dot" style="background:var(--success)"></span><span style="color:var(--success)">Available</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DRIVERS -->
+<div class="page" id="page-drivers">
+  <div class="mini-metrics">
+    <div class="mini-m"><div class="mini-val" style="color:var(--success)">11</div><div class="mini-lbl">On Road</div></div>
+    <div class="mini-m"><div class="mini-val" style="color:var(--brand)">4</div><div class="mini-lbl">Available</div></div>
+    <div class="mini-m"><div class="mini-val" style="color:var(--warn)">2</div><div class="mini-lbl">On Break</div></div>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Driver</th><th>Truck</th><th>Current Route</th><th>Deliveries</th><th>Rating</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="driver-av" style="width:28px;height:28px;background:#EEF2FF;color:var(--brand);font-size:10px">EN</div><div><div style="font-size:13px;font-weight:500">Emeka Nwosu</div><div style="font-size:11px;color:var(--txt3)">8 yrs exp</div></div></div></td><td class="mono">TRUCK-04</td><td>Lagos → Kano</td><td>142 this month</td><td>⭐ 4.9</td><td><span class="badge transit">On Duty</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="driver-av" style="width:28px;height:28px;background:#ECFDF5;color:var(--success);font-size:10px">TA</div><div><div style="font-size:13px;font-weight:500">Tunde Adeyemi</div><div style="font-size:11px;color:var(--txt3)">5 yrs exp</div></div></div></td><td class="mono">TRUCK-07</td><td>PH → Lagos</td><td>98 this month</td><td>⭐ 4.7</td><td><span class="badge delayed">Delayed</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="driver-av" style="width:28px;height:28px;background:#FFFBEB;color:var(--warn);font-size:10px">CO</div><div><div style="font-size:13px;font-weight:500">Chukwu Obi</div><div style="font-size:11px;color:var(--txt3)">3 yrs exp</div></div></div></td><td class="mono">TRUCK-02</td><td>Abuja → Enugu</td><td>77 this month</td><td>⭐ 4.5</td><td><span class="badge delivered">Available</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="driver-av" style="width:28px;height:28px;background:#ECFDF5;color:var(--success);font-size:10px">YM</div><div><div style="font-size:13px;font-weight:500">Yusuf Musa</div><div style="font-size:11px;color:var(--txt3)">6 yrs exp</div></div></div></td><td class="mono">TRUCK-11</td><td>Idle</td><td>120 this month</td><td>⭐ 4.8</td><td><span class="badge delivered">Available</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="driver-av" style="width:28px;height:28px;background:#FEF2F2;color:var(--danger);font-size:10px">BI</div><div><div style="font-size:13px;font-weight:500">Bola Ibrahim</div><div style="font-size:11px;color:var(--txt3)">2 yrs exp</div></div></div></td><td class="mono">TRUCK-09</td><td>—</td><td>45 this month</td><td>⭐ 4.2</td><td><span class="badge pending">On Break</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- AI CO-PILOT -->
+<div class="page" id="page-ai">
+  <div class="two-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">AI Co-pilot Chat</div><span class="ai-chip" style="background:var(--brand);color:#fff;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600">Powered by Claude</span></div>
+      <div class="card" style="display:flex;flex-direction:column">
+        <div class="chat-area" id="chatArea">
+          <div class="ai-msg"><strong>FreightFlow AI:</strong> Hello Ade! I'm your logistics co-pilot. I can help you optimize routes, analyze costs, predict delays, generate client reports, and give you real-time insights about your fleet. What do you need?</div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-in" id="chatInput" placeholder="e.g. Which routes are losing money?" onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="btn primary" onclick="sendChat()" id="chatBtn"><i class="ti ti-send"></i> Send</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head"><div class="sec-title">Quick AI Actions</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('Which of my routes are most profitable right now?')"><i class="ti ti-chart-bar"></i> Analyze route profitability</button>
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('Which shipments are at risk of being late today and why?')"><i class="ti ti-alert-triangle"></i> Predict delay risks</button>
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('How can I reduce my fuel costs by 10% this month?')"><i class="ti ti-gas-station"></i> Fuel savings plan</button>
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('Generate a weekly performance summary I can send to my clients')"><i class="ti ti-file-analytics"></i> Generate client report</button>
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('Should I hire more drivers or optimize current driver schedules?')"><i class="ti ti-users"></i> Workforce advice</button>
+        <button class="btn" style="justify-content:flex-start;width:100%" onclick="quickAsk('What is the best route from Lagos to Kano today considering traffic and fuel?')"><i class="ti ti-route"></i> Optimize a route</button>
+      </div>
+      <div class="sec-head" style="margin-top:20px"><div class="sec-title">AI Capabilities</div></div>
+      <div class="card"><div class="card-body" style="font-size:12px;color:var(--txt2);line-height:1.7">
+        <div style="margin-bottom:6px"><i class="ti ti-check" style="color:var(--success)"></i> Real-time delay prediction & rerouting</div>
+        <div style="margin-bottom:6px"><i class="ti ti-check" style="color:var(--success)"></i> Route cost & profitability analysis</div>
+        <div style="margin-bottom:6px"><i class="ti ti-check" style="color:var(--success)"></i> Fuel usage optimization</div>
+        <div style="margin-bottom:6px"><i class="ti ti-check" style="color:var(--success)"></i> Auto-assign best driver for route</div>
+        <div style="margin-bottom:6px"><i class="ti ti-check" style="color:var(--success)"></i> Client report generation</div>
+        <div><i class="ti ti-check" style="color:var(--success)"></i> Tariff & compliance alerts</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST TRACKER -->
+<div class="page" id="page-costs">
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label">Monthly Fuel</div><div class="stat-val" style="color:var(--danger)">₦2.8M</div><div class="stat-delta down">+14% over budget</div></div>
+    <div class="stat-card"><div class="stat-label">Toll & Levies</div><div class="stat-val">₦340K</div><div class="stat-delta neutral">Within budget</div></div>
+    <div class="stat-card"><div class="stat-label">Driver Wages</div><div class="stat-val">₦1.2M</div><div class="stat-delta neutral">On track</div></div>
+    <div class="stat-card"><div class="stat-label">AI Savings Found</div><div class="stat-val" style="color:var(--success)">₦420K</div><div class="stat-delta up">Potential this month</div></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">Cost Breakdown by Route</div></div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Route</th><th>Fuel</th><th>Tolls</th><th>Total</th><th>Margin</th></tr></thead>
+          <tbody>
+            <tr><td>Lagos → Kano</td><td>₦68K</td><td>₦8.2K</td><td>₦76K</td><td><span class="cost-flag" style="background:var(--success-bg);color:var(--success)">32%</span></td></tr>
+            <tr><td>PH → Lagos</td><td>₦45K</td><td>₦5.1K</td><td>₦50K</td><td><span class="cost-flag" style="background:var(--warn-bg);color:var(--warn)">18%</span></td></tr>
+            <tr><td>Abuja → Enugu</td><td>₦38K</td><td>₦4.4K</td><td>₦42K</td><td><span class="cost-flag" style="background:var(--success-bg);color:var(--success)">28%</span></td></tr>
+            <tr><td>Lagos → Ibadan</td><td>₦22K</td><td>₦2.8K</td><td>₦25K</td><td><span class="cost-flag" style="background:var(--danger-bg);color:var(--danger)">9%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head"><div class="sec-title">AI Cost Recommendations</div></div>
+      <div class="card"><div class="card-body">
+        <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Merge Lagos–Ibadan routes</div>
+          <div style="font-size:12px;color:var(--txt3)">Combining 3 small loads saves ₦180K/month in fuel</div>
+          <button class="btn primary" style="margin-top:8px;padding:5px 10px;font-size:12px" onclick="toast('Route merge scheduled for next week')">Apply</button>
+        </div>
+        <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Switch PH carrier</div>
+          <div style="font-size:12px;color:var(--txt3)">Alternative carrier offers 8% lower rate for same SLA</div>
+          <button class="btn" style="margin-top:8px;padding:5px 10px;font-size:12px" onclick="toast('Carrier comparison report generated')">Compare</button>
+        </div>
+        <div style="padding:10px 0">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Bulk fuel purchase</div>
+          <div style="font-size:12px;color:var(--txt3)">Pre-buying 10,000L saves ~₦120K vs daily pump</div>
+          <button class="btn" style="margin-top:8px;padding:5px 10px;font-size:12px" onclick="toast('Fuel purchase request sent')">Schedule</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div class="page" id="page-reports">
+  <div class="two-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">Generate Report</div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-group" style="margin-bottom:12px"><label class="form-label">Report Type</label>
+          <select class="form-select"><option>Weekly Performance Summary</option><option>Monthly Revenue Report</option><option>Driver Performance</option><option>Route Profitability</option><option>Client Delivery Report</option><option>Fuel Consumption Analysis</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">From Date</label><input class="form-input" type="date"></div>
+          <div class="form-group"><label class="form-label">To Date</label><input class="form-input" type="date"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px"><label class="form-label">Client (optional)</label><input class="form-input" placeholder="Leave blank for all clients"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn primary" onclick="toast('Report generated and ready to download')"><i class="ti ti-file-analytics"></i> Generate</button>
+          <button class="btn" onclick="toast('Report sent to client email')"><i class="ti ti-send"></i> Email to Client</button>
+        </div>
+      </div></div>
+    </div>
+    <div>
+      <div class="sec-head"><div class="sec-title">Recent Reports</div></div>
+      <div class="card">
+        <div class="alert-item"><div class="alert-icon info"><i class="ti ti-file"></i></div><div><div class="alert-title">Weekly Summary — May W3</div><div class="alert-sub">Generated May 23, 2026</div></div><button class="sec-action" onclick="toast('Downloading report…')">Download</button></div>
+        <div class="alert-item"><div class="alert-icon info"><i class="ti ti-file"></i></div><div><div class="alert-title">Route Profitability — April</div><div class="alert-sub">Generated May 2, 2026</div></div><button class="sec-action" onclick="toast('Downloading report…')">Download</button></div>
+        <div class="alert-item"><div class="alert-icon info"><i class="ti ti-file"></i></div><div><div class="alert-title">Fuel Analysis — Q1 2026</div><div class="alert-sub">Generated Apr 5, 2026</div></div><button class="sec-action" onclick="toast('Downloading report…')">Download</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="two-col">
+    <div>
+      <div class="sec-head"><div class="sec-title">Company Profile</div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" value="Okafor Logistics Ltd"></div>
+          <div class="form-group"><label class="form-label">RC Number</label><input class="form-input" value="RC-884721"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">HQ City</label><input class="form-input" value="Lagos"></div>
+          <div class="form-group"><label class="form-label">Fleet Size</label><input class="form-input" value="13 trucks"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px"><label class="form-label">Email for Reports</label><input class="form-input" value="ade@okaforlogistics.com"></div>
+        <button class="btn primary" onclick="toast('Settings saved successfully')"><i class="ti ti-device-floppy"></i> Save Changes</button>
+      </div></div>
+      <div class="sec-head" style="margin-top:16px"><div class="sec-title">AI Settings</div></div>
+      <div class="card"><div class="card-body">
+        <div class="cost-row"><span class="cost-label">AI Route Optimization</span><select class="form-select" style="width:auto"><option>Auto (Recommended)</option><option>Manual Approval</option><option>Off</option></select></div>
+        <div class="cost-row"><span class="cost-label">Delay Alerts</span><select class="form-select" style="width:auto"><option>Immediate</option><option>Every 30 min</option><option>Daily digest</option></select></div>
+        <div class="cost-row"><span class="cost-label">Cost Threshold Alert</span><input class="form-input" style="width:120px" value="10" type="number"> <span style="font-size:12px;color:var(--txt3)">% over budget</span></div>
+      </div></div>
+    </div>
+    <div>
+      <div class="sec-head"><div class="sec-title">Notification Preferences</div></div>
+      <div class="card"><div class="card-body">
+        <div class="cost-row"><span class="cost-label">Shipment delays</span><span class="badge delivered">On</span></div>
+        <div class="cost-row"><span class="cost-label">Delivery confirmations</span><span class="badge delivered">On</span></div>
+        <div class="cost-row"><span class="cost-label">Cost overruns</span><span class="badge delivered">On</span></div>
+        <div class="cost-row"><span class="cost-label">Driver location updates</span><span class="badge pending">Off</span></div>
+        <div class="cost-row"><span class="cost-label">Weekly AI summary email</span><span class="badge delivered">On</span></div>
+        <button class="btn primary" style="margin-top:12px" onclick="toast('Notification settings saved')"><i class="ti ti-device-floppy"></i> Save</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<div id="toast"><i class="ti ti-circle-check"></i><span id="toast-msg"></span></div>
+
+<script>
+const SHIPMENTS=[
+  {id:'SH-2847',client:'Dangote Group',route:'Lagos → Kano',driver:'Emeka Nwosu',status:'transit',progress:68,eta:'2h 14m'},
+  {id:'SH-2846',client:'MTN Nigeria',route:'PH → Lagos',driver:'Tunde Adeyemi',status:'delayed',progress:45,eta:'+45m late'},
+  {id:'SH-2845',client:'Zenith Bank',route:'Abuja → Enugu',driver:'Chukwu Obi',status:'delivered',progress:100,eta:'Delivered'},
+  {id:'SH-2844',client:'Flour Mills',route:'Lagos → Ibadan',driver:'Yusuf Musa',status:'pending',progress:0,eta:'Tomorrow'},
+  {id:'SH-2843',client:'NNPC',route:'Warri → Lagos',driver:'Emeka Nwosu',status:'transit',progress:30,eta:'5h 40m'},
+  {id:'SH-2842',client:'Access Bank',route:'Lagos → Abuja',driver:'Bola Ibrahim',status:'transit',progress:82,eta:'45 min'},
+  {id:'SH-2841',client:'Nestle Nigeria',route:'Ibadan → PH',driver:'Yusuf Musa',status:'delivered',progress:100,eta:'Delivered'},
+];
+
+const PAGES={dashboard:'Dashboard',shipments:'Shipments',dispatch:'New Shipment',drivers:'Driver Fleet',ai:'AI Co-pilot',costs:'Cost Tracker',reports:'Reports',settings:'Settings'};
+const SUBS={dashboard:'Good morning, Ade — 3 shipments need attention',shipments:'Track and manage all your shipments',dispatch:'Create and optimize a new shipment',drivers:'Monitor all your drivers in real-time',ai:'Your intelligent logistics assistant',costs:'Analyze and reduce operational costs',reports:'Generate and share performance reports',settings:'Configure your FreightFlow account'};
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const p=document.getElementById('page-'+id);
+  if(p)p.classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.getElementById('topbar-title').textContent=PAGES[id]||id;
+  document.getElementById('topbar-sub').textContent=SUBS[id]||'';
+  if(id==='shipments')renderShipments(SHIPMENTS);
+}
+
+function statusBadge(s){const m={transit:'<span class="badge transit"><i class="ti ti-truck"></i>In Transit</span>',delayed:'<span class="badge delayed"><i class="ti ti-alert-circle"></i>Delayed</span>',delivered:'<span class="badge delivered"><i class="ti ti-check"></i>Delivered</span>',pending:'<span class="badge pending"><i class="ti ti-clock"></i>Pending</span>'};return m[s]||s}
+function fillColor(s){return{transit:'fill-blue',delayed:'fill-warn',delivered:'fill-green',pending:'fill-warn'}[s]||'fill-blue'}
+
+function renderShipments(data){
+  const b=document.getElementById('shipment-body');
+  if(!b)return;
+  b.innerHTML=data.map(s=>`<tr onclick="openShipment('${s.id}')">
+    <td class="mono">${s.id}</td><td>${s.client}</td><td>${s.route}</td><td>${s.driver}</td>
+    <td>${statusBadge(s.status)}</td>
+    <td style="min-width:100px"><div class="progress-bar"><div class="progress-fill ${fillColor(s.status)}" style="width:${s.progress}%"></div></div><div style="font-size:10px;color:var(--txt3);margin-top:2px">${s.progress}%</div></td>
+    <td>${s.eta}</td>
+    <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();toast('Tracking link copied')"><i class="ti ti-copy"></i></button></td>
+  </tr>`).join('');
+}
+
+function filterShipments(f,btn){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderShipments(f==='all'?SHIPMENTS:SHIPMENTS.filter(s=>s.status===f));
+}
+
+function searchShipments(q){
+  renderShipments(q?SHIPMENTS.filter(s=>s.id.toLowerCase().includes(q.toLowerCase())||s.route.toLowerCase().includes(q.toLowerCase())||s.client.toLowerCase().includes(q.toLowerCase())):SHIPMENTS);
+}
+
+function openShipment(id){toast('Opening shipment '+id+' details…')}
+
+function createShipment(){
+  const c=document.getElementById('f-client').value;
+  const fr=document.getElementById('f-from').value;
+  const to=document.getElementById('f-to').value;
+  if(!c||!fr||!to){toast('Please fill in client, origin and destination');return;}
+  toast('Shipment created: '+fr+' → '+to+' for '+c);
+  clearForm();
+}
+function clearForm(){['f-client','f-phone','f-from','f-to','f-weight','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''})}
+
+function applyReroute(){toast('Route updated — Emeka Nwosu rerouted via Ikorodu Rd. Saving 18 minutes.')}
+
+async function sendChat(){
+  const inp=document.getElementById('chatInput');
+  const area=document.getElementById('chatArea');
+  const btn=document.getElementById('chatBtn');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  area.innerHTML+=`<div class="user-msg">${msg}</div>`;
+  area.scrollTop=area.scrollHeight;
+  btn.innerHTML='<i class="ti ti-loader spin"></i>';
+  btn.disabled=true;
+  const thinkingId='thinking-'+Date.now();
+  area.innerHTML+=`<div class="ai-msg" id="${thinkingId}" style="opacity:.5">AI is thinking…</div>`;
+  area.scrollTop=area.scrollHeight;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are FreightFlow AI, a logistics operations co-pilot for small and medium Nigerian logistics businesses. You help with route optimization, cost reduction, delay prediction, driver management, and generating client reports. Be concise, practical, and specific. Use ₦ for currency. Keep responses to 3-5 sentences unless asked for more.',messages:[{role:'user',content:msg}]})});
+    const d=await r.json();
+    const reply=d.content?.find(c=>c.type==='text')?.text||'Sorry, I could not generate a response.';
+    document.getElementById(thinkingId).remove();
+    area.innerHTML+=`<div class="ai-msg"><strong>FreightFlow AI:</strong> ${reply}</div>`;
+  }catch(e){
+    document.getElementById(thinkingId).remove();
+    area.innerHTML+=`<div class="ai-msg"><strong>FreightFlow AI:</strong> I'm having trouble connecting right now. Please try again in a moment.</div>`;
+  }
+  btn.innerHTML='<i class="ti ti-send"></i> Send';
+  btn.disabled=false;
+  area.scrollTop=area.scrollHeight;
+}
+
+function quickAsk(q){document.getElementById('chatInput').value=q;sendChat();}
+
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.style.display='flex';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.style.display='none',3000);
+}
+</script>
+</body>
+</html>
